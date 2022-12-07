@@ -156,6 +156,15 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pick Up Item"",
+                    ""type"": ""Button"",
+                    ""id"": ""a97279e1-fc66-4978-9f2a-0ceba01678ac"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -200,6 +209,17 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Heavy Attack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0e5471ee-221a-45a8-bd2a-15fa2e69223e"",
+                    ""path"": ""<Keyboard>/y"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pick Up Item"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -265,6 +285,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_PlayerActions_Roll = m_PlayerActions.FindAction("Roll", throwIfNotFound: true);
         m_PlayerActions_LightAttack = m_PlayerActions.FindAction("Light Attack", throwIfNotFound: true);
         m_PlayerActions_HeavyAttack = m_PlayerActions.FindAction("Heavy Attack", throwIfNotFound: true);
+        m_PlayerActions_PickUpItem = m_PlayerActions.FindAction("Pick Up Item", throwIfNotFound: true);
         // Player Inventory
         m_PlayerInventory = asset.FindActionMap("Player Inventory", throwIfNotFound: true);
         m_PlayerInventory_ChangeRightWeapon = m_PlayerInventory.FindAction("Change Right Weapon", throwIfNotFound: true);
@@ -372,6 +393,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerActions_Roll;
     private readonly InputAction m_PlayerActions_LightAttack;
     private readonly InputAction m_PlayerActions_HeavyAttack;
+    private readonly InputAction m_PlayerActions_PickUpItem;
     public struct PlayerActionsActions
     {
         private @PlayerControls m_Wrapper;
@@ -379,6 +401,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @Roll => m_Wrapper.m_PlayerActions_Roll;
         public InputAction @LightAttack => m_Wrapper.m_PlayerActions_LightAttack;
         public InputAction @HeavyAttack => m_Wrapper.m_PlayerActions_HeavyAttack;
+        public InputAction @PickUpItem => m_Wrapper.m_PlayerActions_PickUpItem;
         public InputActionMap Get() { return m_Wrapper.m_PlayerActions; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -397,6 +420,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @HeavyAttack.started -= m_Wrapper.m_PlayerActionsActionsCallbackInterface.OnHeavyAttack;
                 @HeavyAttack.performed -= m_Wrapper.m_PlayerActionsActionsCallbackInterface.OnHeavyAttack;
                 @HeavyAttack.canceled -= m_Wrapper.m_PlayerActionsActionsCallbackInterface.OnHeavyAttack;
+                @PickUpItem.started -= m_Wrapper.m_PlayerActionsActionsCallbackInterface.OnPickUpItem;
+                @PickUpItem.performed -= m_Wrapper.m_PlayerActionsActionsCallbackInterface.OnPickUpItem;
+                @PickUpItem.canceled -= m_Wrapper.m_PlayerActionsActionsCallbackInterface.OnPickUpItem;
             }
             m_Wrapper.m_PlayerActionsActionsCallbackInterface = instance;
             if (instance != null)
@@ -410,6 +436,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @HeavyAttack.started += instance.OnHeavyAttack;
                 @HeavyAttack.performed += instance.OnHeavyAttack;
                 @HeavyAttack.canceled += instance.OnHeavyAttack;
+                @PickUpItem.started += instance.OnPickUpItem;
+                @PickUpItem.performed += instance.OnPickUpItem;
+                @PickUpItem.canceled += instance.OnPickUpItem;
             }
         }
     }
@@ -465,6 +494,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnRoll(InputAction.CallbackContext context);
         void OnLightAttack(InputAction.CallbackContext context);
         void OnHeavyAttack(InputAction.CallbackContext context);
+        void OnPickUpItem(InputAction.CallbackContext context);
     }
     public interface IPlayerInventoryActions
     {

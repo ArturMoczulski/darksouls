@@ -12,6 +12,8 @@ namespace DarkSouls
         public WeaponItem leftWeapon;
         public WeaponItem unarmedWeapon;
 
+        public List<WeaponItem> weaponItems;
+
         public WeaponItem[] weaponsInRightHandSlots = new WeaponItem[3];
         public WeaponItem[] weaponsInLeftHandSlots = new WeaponItem[3];
 

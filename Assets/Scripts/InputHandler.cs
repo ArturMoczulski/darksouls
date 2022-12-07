@@ -18,6 +18,7 @@ namespace DarkSouls
         public bool changeLeftWeaponInput;
         public bool lightAttackInput;
         public bool heavyAttackInput;
+        public bool interactInput;
 
         public bool sprintFlag;
         public bool rollFlag;
@@ -67,6 +68,7 @@ namespace DarkSouls
             HandleRollInput(delta);
             HandleAttackInput(delta);
             HandleQuickSlotsInput();
+            HandleInteractingButtonInput();
         }
 
         private void MoveInput(float delta)
@@ -156,6 +158,11 @@ namespace DarkSouls
             }
         }
 
+        public void HandleInteractingButtonInput()
+        {
+            inputActions.PlayerActions.PickUpItem.performed += i => interactInput = true;
+        }
+
         public void StateReset()
         {
             rollFlag = false;
@@ -164,6 +171,7 @@ namespace DarkSouls
             heavyAttackInput = false;
             changeRightWeaponInput = false;
             changeLeftWeaponInput = false;
+            interactInput = false;
         }
     }
 

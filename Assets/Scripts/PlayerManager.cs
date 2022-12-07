@@ -19,6 +19,9 @@ namespace DarkSouls
         CameraHandler cameraHandler;
         PlayerLocomotion playerLocomotion;
         PlayerStats playerStats;
+        PlayerInventory playerInventory;
+
+        public InteractableUI interactableUI;
 
         // Start is called before the first frame update
         void Start()
@@ -29,6 +32,7 @@ namespace DarkSouls
             animator = GetComponentInChildren<Animator>();
             cameraHandler = CameraHandler.singleton;
             playerStats = GetComponent<PlayerStats>();
+            interactableUI = FindObjectOfType<InteractableUI>();
         }
 
         // Update is called once per frame
@@ -59,6 +63,8 @@ namespace DarkSouls
 			playerLocomotion.HandleRollingAndSprinting(delta);
 			playerLocomotion.HandleFalling(delta, playerLocomotion.moveDirection);
 
+            CheckForInteractableObjects();
+
             inputHandler.StateReset();
 
             if (isInAir)
@@ -67,8 +73,39 @@ namespace DarkSouls
             }
         }
 
-        private void LateUpdate()
+        void CheckForInteractableObjects()
         {
+            RaycastHit hit;
+
+            if (Physics.SphereCast(transform.position, 0.3f, transform.forward, out hit, 1f, cameraHandler.ignoreLayers))
+            {
+                if (hit.collider.tag == "Interactable")
+                {
+                    Interactable interactable = hit.collider.GetComponent<Interactable>();
+
+                    if (interactable != null)
+                    {
+                        string interactableText = interactable.interactableText;
+                        interactableUI.interactableText.text = interactableText;
+                        interactableUI.interactablePopUp.SetActive(true);
+
+                        if (inputHandler.interactInput)
+                        {
+                            interactable.Interact(this);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                interactableUI.interactablePopUp.SetActive(false);
+
+                if (inputHandler.interactInput && interactableUI.itemPickedUpPopUp.activeSelf)
+                {
+                    interactableUI.itemPickedUpPopUp.SetActive(false);
+                }
+            }
+
         }
 
     }
